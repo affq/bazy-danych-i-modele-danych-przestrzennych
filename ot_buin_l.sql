@@ -33,6 +33,9 @@ create type OT_RodzajBudowliInzynierskiej as enum ('e', 'w', 'k', 'm', 'd', 'p',
 -- kolejowa = kl
 -- tramwajowa = tr
 
+create type OT_RodzajKomunikacji as enum ('dr', 'kl', 'tr');
+-- create type OT_RodzajKomunikacji as enum ('drogowa', 'kolejowa', 'tramwajowa');
+
 create table OT_BUIN_L(
     id serial primary key,
     dlugosc float,
