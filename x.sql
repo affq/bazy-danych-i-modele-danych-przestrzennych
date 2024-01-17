@@ -64,36 +64,86 @@
 -- b. Buforem z pkt. 3.a. wybierze obiekty z ot_buzt_a.
 
 -- c. Do odpowiedniej z tabel powstałych w pkt. 2 wprowadzi nowy rekord danych zawierający 
--- wartość z atrybutu rodzaj obiektu, liczbę obiektów z ot_buzt_a, które zostały wybrane w pkt. 
--- 3.b., geometrię powstałą z wycięcia obiektów wybranych w pkt. 3.b. buforem.
+-- wartość z atrybutu rodzaj obiektu, liczbę obiektów z ot_buzt_a, które zostały wybrane w pkt. 3b, geometrię powstałą z wycięcia obiektów wybranych w pkt. 3.b. buforem.
 
 create or replace function funkcja (liczba real)
 returns text as
 $$
 declare
+    rodzaj text;
+    nosnosc float;
+    geom geometry;
+    rec l;
+    rec a;
+    counter integer;
+
+    min_nosnosc float;
+    promien float;
+
     grupy cursor
     for
-        select rodzajKomunikacji as rodzaj
-        from ot_buin_l
-        group by rodzajKomunikacji;
-    rec record;
-    rodzaj text;
-    liczba real;
-    begin
-        open grupy;
-        loop
-            fetch grupy into rec;
-            exit when not found;
-            rodzaj := rec.rodzaj;
-            drop table if exists zbiorniki_przy_obiektach_ || rodzaj;
-            create table zbiorniki_przy_obiektach_ || rodzaj(
-                id serial primary key,
-                rodzaj text,
-                liczba integer,
-                geom geometry
-            );
-        end loop;
-        close grupy;
+    select rodzajkomunikacji 
+    from ot_buin_l 
+    group by rodzajkomunikacji;
 
-    end;
-$$
+    obiekt cursor
+    for
+    select nazwa, rodzajkomunikacji, nosnosc, geom
+    from ot_buin_l;
+
+    obiekt_buzt cursor
+    for
+    select nazwa, rodzaj, geom
+    from ot_buzt_a;
+
+begin
+    open grupy;
+    loop
+        fetch grupy into rodzaj;
+        exit when not found;
+        create table zbiorniki_przy_obiektach_ || rodzaj || (
+            id serial primary key,
+            rodzaj text,
+            liczba integer,
+            geom geometry
+        );
+    end loop;
+    close grupy;
+
+    min_nosnosc := min(nosnosc) from ot_buin_l;
+
+    open obiekt;
+    open obiekt_buzt;
+
+    loop
+        fetch obiekt into l;
+        exit when not found;
+
+        if l.nosnosc is null then
+            nosnosc := min_nosnosc;
+        else
+            nosnosc := l.nosnosc;
+        end if;
+
+        promien := nosnosc * liczba;
+
+        geom := st_buffer(l.geom, promien);
+
+        loop
+        fetch obiekt_buzt into a;
+        exit when not found;
+
+        counter := 0;
+
+        if st_within(a.geom, geom) then
+            counter := counter + 1;
+            geom := st_intersection(geom, a.geom);
+        end if;
+        end loop;
+
+        insert into zbiorniki_przy_obiektach_ || l.rodzajkomunikacji || (rodzaj, liczba, geom) values (a.rodzaj, counter, geom);
+
+    end loop;
+    return 'hurra';
+end;
+
