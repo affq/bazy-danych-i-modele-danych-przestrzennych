@@ -17,6 +17,8 @@ left join ot_zrodloDanych as zd2 on buzt.x_zrodloDanychA = zd2.id
 left join ot_rodzajreprgeom as rrg on buzt.x_rodzajreprgeom = rrg.id
 with data;
 
+create unique index ot_buzt_a_mv_idx on ot_buzt_a_mv using btree(id);
+create index ot_buzt_a_mv_geom_idx on ot_buzt_a_mv using gist(geometria);
 ---------------------------------------
 
 create materialized view ot_buzt_p_mv as
@@ -37,6 +39,9 @@ left join ot_zrodloDanych as zd on buzt.x_zrodloDanychG = zd.id
 left join ot_zrodloDanych as zd2 on buzt.x_zrodloDanychA = zd2.id
 left join ot_rodzajreprgeom as rrg on buzt.x_rodzajreprgeom = rrg.id
 with data;
+
+create unique index ot_buzt_p_mv_idx on ot_buzt_p_mv using btree(id);
+create index ot_buzt_p_mv_geom_idx on ot_buzt_p_mv using gist(geometria);
 
 ---------------------------------------
 
@@ -66,4 +71,7 @@ left join OT_ZrodloDanych as zd on buin.x_zrodloDanychG = zd.id
 left join OT_ZrodloDanych as zd2 on buin.x_zrodloDanychA = zd2.id
 left join OT_RodzajReprGeom as rrg on buin.x_rodzajReprGeom = rrg.id
 with data;
+
+create unique index ot_buin_l_mv_idx on ot_buin_l_mv using btree(id);
+create index ot_buin_l_mv_geom_idx on ot_buin_l_mv using gist(geometria);
 

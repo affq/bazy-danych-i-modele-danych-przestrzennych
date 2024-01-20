@@ -1,4 +1,4 @@
-create function ot_buzt_a_insert()
+create or replace function ot_buzt_a_insert()
     returns trigger as
     $$
     begin

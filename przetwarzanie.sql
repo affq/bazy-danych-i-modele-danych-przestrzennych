@@ -1,5 +1,3 @@
-
-
 create or replace function funkcja(parametr real)
 returns text as
 $$
@@ -31,7 +29,6 @@ begin
         
         execute 'create table if not exists zbiorniki_przy_obiektach_' || rec.rodzajKomunikacji || '(id serial primary key, rodzaj text, liczba integer, geom geometry(polygon, 2180))';
 
-        --zaznacz tę część buzt_a, która jest w buforze...
         g := 'POLYGON((10 10, 10 20, 20 20, 20 10, 10 10))'
 
         execute 'insert into zbiorniki_przy_obiektach_' || rec.rodzajKomunikacji || '(rodzaj, liczba, geom) select rodzaj, count(*), g from ot_buzt_a';
