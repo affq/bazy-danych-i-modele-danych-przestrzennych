@@ -70,3 +70,34 @@ create table OT_BUZT_P(
     x_dataUtworzenia date not null,
     x_informDodatkowa text
 );
+
+create index ot_buin_l_konstrukcja on ot_buin_l(konstrukcja);
+create index ot_buin_l_materialKonstrukcyjnyPodpor on ot_buin_l(materialKonstrukcyjnyPodpor);
+create index ot_buin_l_materialKonstrukcyjnyPomostu on ot_buin_l(materialKonstrukcyjnyPomostu);
+create index ot_buin_l_rodzaj on ot_buin_l(rodzaj);
+create index ot_buin_l_rodzajKomunikacji on ot_buin_l(rodzajKomunikacji);
+create index ot_buin_l_idIIP on ot_buin_l(idIIP);
+create index ot_buin_l_x_katDoklGeom on ot_buin_l(x_katDoklGeom);
+create index ot_buin_l_x_zrodloDanychG on ot_buin_l(x_zrodloDanychG);
+create index ot_buin_l_x_zrodloDanychA on ot_buin_l(x_zrodloDanychA);
+create index ot_buin_l_x_rodzajReprGeom on ot_buin_l(x_rodzajReprGeom);
+
+create index ot_buzt_a_rodzaj on ot_buzt_a(rodzaj);
+create index ot_buzt_a_idIIP on ot_buzt_a(idIIP);
+create index ot_buzt_a_x_katDoklGeom on ot_buzt_a(x_katDoklGeom);
+create index ot_buzt_a_x_zrodloDanychG on ot_buzt_a(x_zrodloDanychG);
+create index ot_buzt_a_x_zrodloDanychA on ot_buzt_a(x_zrodloDanychA);
+create index ot_buzt_a_x_rodzajReprGeom on ot_buzt_a(x_rodzajReprGeom);
+
+create index ot_buzt_p_rodzaj on ot_buzt_p(rodzaj);
+create index ot_buzt_p_idIIP on ot_buzt_p(idIIP);
+create index ot_buzt_p_x_katDoklGeom on ot_buzt_p(x_katDoklGeom);
+create index ot_buzt_p_x_zrodloDanychG on ot_buzt_p(x_zrodloDanychG);
+create index ot_buzt_p_x_zrodloDanychA on ot_buzt_p(x_zrodloDanychA);
+create index ot_buzt_p_x_rodzajReprGeom on ot_buzt_p(x_rodzajReprGeom);
+
+create index ot_buin_l_geometria on ot_buin_l using gist(geometria);
+create index ot_buzt_a_geometria on ot_buzt_a using gist(geometria);
+create index ot_buzt_p_geometria on ot_buzt_p using gist(geometria);
+
+
